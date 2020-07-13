@@ -23,7 +23,25 @@ it('render with and without name', () => {
   expect(container.textContent).toBe("Hey");
 
   act(() => {
-    render(<App name="testName"/>, container);
+    render(<App name="testName" />, container);
   });
   expect(container.textContent).toBe("testName");
+});
+
+it('render some data', async () => {
+  const fakeData = {
+    data: "some data"
+  };
+
+  jest.spyOn(global, "fetch").mockImplementation(() =>
+    Promise.resolve({
+      json: () => Promise.resolve(fakeData)
+    })
+  );
+
+  await act(async () => {
+    render(<App />, container);
+  });
+
+  global.fetch.mockRestore();
 });
