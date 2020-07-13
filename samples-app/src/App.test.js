@@ -1,12 +1,13 @@
-import React from 'react';
-import { unmountComponentAtNode, render } from 'react-dom';
-import { act } from 'react-dom/test-utils';
+import React from "react";
+import { unmountComponentAtNode, render } from "react-dom";
+import { act } from "react-dom/test-utils";
+import pretty from "pretty";
 
-import App from './App';
+import App from "./App";
 
 let container = null;
 beforeEach(() => {
-  container = document.createElement('div');
+  container = document.createElement("div");
   document.body.appendChild(container);
 });
 
@@ -16,7 +17,7 @@ afterEach(() => {
   container = null;
 });
 
-it('render with and without name', () => {
+it("render with and without name", () => {
   act(() => {
     render(<App />, container);
   });
@@ -28,14 +29,14 @@ it('render with and without name', () => {
   expect(container.textContent).toBe("testName");
 });
 
-it('render some data', async () => {
+it("render some data", async () => {
   const fakeData = {
-    data: "some data"
+    data: "some data",
   };
 
   jest.spyOn(global, "fetch").mockImplementation(() =>
     Promise.resolve({
-      json: () => Promise.resolve(fakeData)
+      json: () => Promise.resolve(fakeData),
     })
   );
 
@@ -44,4 +45,8 @@ it('render some data', async () => {
   });
 
   global.fetch.mockRestore();
+
+  expect(pretty(container.innerHTML)).toMatchInlineSnapshot(
+    `"<span>Hey</span>"`
+  );
 });
