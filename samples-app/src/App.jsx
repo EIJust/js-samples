@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+
+import FallBackComponent from './FallBackComponent';
+
+const LazyComponent = React.lazy(() => import('./LazyComponent'))
 
 export default function App(props) {
   const [data, setData] = useState(null);
@@ -12,5 +16,11 @@ export default function App(props) {
     fetchData();
   });
 
-  return props.name ? <h1>{props.name}</h1> : <span>Hey</span>
+  return (
+    <div>
+      <Suspense fallback={<FallBackComponent />}>
+        <LazyComponent />
+      </Suspense>
+    </div>
+  )
 }
